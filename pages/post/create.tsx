@@ -16,7 +16,7 @@ export default function Create(props: Props) {
   )
 }
 export async function getServerSideProps(contex: GetServerSidePropsContext){
-  contex.res.setHeader('Cache-Control', 's-maxage=15') // 5 seconds
+  contex.res.setHeader('Cache-Control', 's-maxage=5,stale-white-revalidate') // 5 seconds
   await new Promise((resolve,rejects) => setTimeout(()=>resolve(3000), 3000))
   const postId = contex.query.postId
   const response = await fetch(`https://js-post-api.herokuapp.com/api/posts/${postId}`)
