@@ -7,10 +7,13 @@ type Props = {
 
 export default function PostDetail({ post }: Props) {
   const route = useRouter();
+  if(route.isFallback) {
+    return <div>Loading...</div> // fallback page when mode true
+  }
   if(!post) {
     return null;
   }
-  
+
   return <>
   <div>{post.id}</div>
   <h1>{post.title}</h1>
@@ -28,6 +31,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     "https://js-post-api.herokuapp.com/api/posts?_page=1&_limit=10"
   );
   const { data } = await res.json();
+
   return {
     paths: data.map((item: any) => ({
       params: { postId: item.id },
@@ -55,5 +59,6 @@ export const getStaticProps: GetStaticProps<Props> = async (
     props: {
       post:{id,title, description,imageUrl} ,
     },
+    revalidate:10 //point to second re-render new data each 10s when user visit this page
   };
 };
